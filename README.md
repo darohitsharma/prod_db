@@ -35,3 +35,5 @@ If origin_mismatch appears, use localhost:5173 or add the exact scheme/host/port
 
 
 Display update: Yield is shown as a percentage (for example 97.00%) in the KPI, summary/detail tables, chart tooltips and CSV. Daily chart dates are all labelled as DD Mon; scroll horizontally for longer date ranges. The current Asia/Kolkata day is highlighted in amber and marked TODAY. The chart bars themselves remain Make and Receive quantities, not percentages.
+
+Today card: Make, Receive and weighted Yield for the current Asia/Kolkata date. Source, category and search apply; historical date/month filters do not. The first three cards keep their existing filtered-overall scope. Record/quality diagnostic counts and Check flags are removed from the normal UI/CSV. Admin checks are supplied separately as a private timestamped report, not a hidden public admin route. Dates without production rows are labelled No records on the daily chart, not counted as zero-production source rows.
