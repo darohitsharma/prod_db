@@ -15,9 +15,47 @@ tbody tr.today-row td:first-child{box-shadow:inset 4px 0 0 var(--green)}
 body.dark tbody tr.today-row td{color:#e7f4ea;animation-name:today-blink-dark;background-color:#2a4a33}
 @keyframes today-blink-dark{0%,100%{background-color:#2a4a33}50%{background-color:#1c2f23}}
 @media(prefers-reduced-motion:reduce){tbody tr.today-row td,body.dark tbody tr.today-row td{animation:none}}
+
+/* Status line sits in the left hero area */
+.hero-status .connection-row{justify-content:flex-start}
+.hero-status .connection-row small{font-size:14px;color:var(--ink)}
+.hero-status .connection-row b{font-weight:650}
+.hero-status .connection-row .dot{width:11px;height:11px}
+/* Dark theme: pure neutral (black / white / grey). Light theme stays green. */
+body.dark{--bg:#0b0b0b;--card:#151515;--ink:#f2f2f2;--muted:#a3a3a3;--line:#2c2c2c;--green:#f2f2f2;--pale:#232323;--bar:#5c5c5c;--today-bg:#3a2d1b;background:#0b0b0b}
+body.dark header{background:rgba(16,16,16,.9);border-bottom-color:#2c2c2c}
+body.dark .controls,body.dark .panel{background:#151515;border-color:#2c2c2c;box-shadow:none}
+body.dark input,body.dark select,body.dark button{background:#1c1c1c;border-color:#333}
+body.dark #theme{background:#1c1c1c}
+body.dark .brand i{box-shadow:0 0 0 5px rgba(255,255,255,.07)}
+body.dark .kpis article,body.dark .kpis article:nth-child(2),body.dark .kpis article:nth-child(4){background:#181818;border-color:#2c2c2c}
+body.dark .kpis article:nth-child(3){background:radial-gradient(ellipse at 95% 0%,rgba(255,255,255,.08),transparent 65%),#1e1e1e;border-color:#2c2c2c}
+body.dark #today-label{background:var(--today-bg);color:var(--today)}
+body.dark .range-actions #refresh{background:#f2f2f2;color:#111}
+body.dark .range-actions #refresh:hover{background:#d9d9d9}
+body.dark .chart-tools select{background:#1c1c1c;border-color:#333}
+body.dark th{background:#1a1a1a}
+body.dark th,body.dark td{border-bottom-color:#2a2a2a}
+body.dark tbody tr:hover{background:#222}
+body.dark .pager{background:#161616;border-top-color:#2c2c2c}
+body.dark dialog{background:#171717;border-color:#333}
+body.dark button:hover{background:#2a2a2a}
+body.dark footer{border-top-color:#2c2c2c}
+body.dark .source-buttons{background:#1a1a1a;border-color:#333}
+body.dark .source-buttons button{background:transparent;color:var(--muted)}
+body.dark .source-buttons button.selected,body.dark .source-buttons button[aria-pressed="true"]{background:#f2f2f2;color:#111}
+body.dark .connection-row .dot.connected{background:#f2f2f2;box-shadow:0 0 0 4px rgba(255,255,255,.12)}
+body.dark .connection-row .dot:not(.connected){box-shadow:0 0 0 4px rgba(240,130,118,.12)}
+body.dark .table-wrap{scrollbar-color:#444 transparent}
+body.dark #header-apply,body.dark #column-apply{background:#2a2a2a;color:#f2f2f2}
+body.dark .filter-active{color:#fff}
+@keyframes today-blink-dark{0%,100%{background-color:#3c3c3c}50%{background-color:#1f1f1f}}
+body.dark tbody tr.today-row td{background-color:#3c3c3c;color:#fff;animation:today-blink-dark 2.4s ease-in-out infinite}
+body.dark tbody tr.today-row td:first-child{box-shadow:inset 4px 0 0 var(--today)}
+@media(prefers-reduced-motion:reduce){body.dark tbody tr.today-row td{animation:none}}
 </style></head><body>
 <header><a class="brand" href="#"><i></i>Nat Habit</a><span class="section-name">Analytics - Operations / Production</span><button id="theme" aria-label="Toggle dark mode">Dark mode</button></header>
-<main><div class="heading"><div><p class="eyebrow">OPERATIONS / PRODUCTION</p><h1>Make. Receive. Understand.</h1><p class="sub">A clear view of production across GP 44 and GP-26.</p></div><div class="status"><div class="top-toggles"><div class="source-control"><span class="filter-label">Source</span><div class="source-buttons" role="group" aria-label="Source"><button data-source="All" aria-pressed="true" onclick="selectSource('All')">All</button><button data-source="GP 44" aria-pressed="false" onclick="selectSource('GP 44')">GP 44</button><button data-source="GP-26" aria-pressed="false" onclick="selectSource('GP-26')">GP-26</button></div><select id="site" hidden aria-label="Source"><option>All</option><option>GP 44</option><option>GP-26</option></select></div><div class="view-control"><span class="filter-label">View</span><div class="source-buttons" role="group" aria-label="View"><button data-mode="day" aria-pressed="true" onclick="selectView('day')">DoD</button><button data-mode="month" aria-pressed="false" onclick="selectView('month')">MoM</button></div><select id="mode" hidden aria-label="View"><option value="day">DoD</option><option value="month">MoM</option></select></div></div><div class="connection-row"><span class="dot" id="connection-dot" role="img" aria-label="Not connected"></span><small id="fresh">Data as of — · not refreshed</small></div><span id="status" class="sr-only" aria-live="polite">Not connected</span></div></div>
+<main><div class="heading"><div class="hero-status"><div class="connection-row"><span class="dot" id="connection-dot" role="img" aria-label="Not connected"></span><small id="fresh">Data as of — · not refreshed</small></div></div><div class="status"><div class="top-toggles"><div class="source-control"><span class="filter-label">Source</span><div class="source-buttons" role="group" aria-label="Source"><button data-source="All" aria-pressed="true" onclick="selectSource('All')">All</button><button data-source="GP 44" aria-pressed="false" onclick="selectSource('GP 44')">GP 44</button><button data-source="GP-26" aria-pressed="false" onclick="selectSource('GP-26')">GP-26</button></div><select id="site" hidden aria-label="Source"><option>All</option><option>GP 44</option><option>GP-26</option></select></div><div class="view-control"><span class="filter-label">View</span><div class="source-buttons" role="group" aria-label="View"><button data-mode="day" aria-pressed="true" onclick="selectView('day')">DoD</button><button data-mode="month" aria-pressed="false" onclick="selectView('month')">MoM</button></div><select id="mode" hidden aria-label="View"><option value="day">DoD</option><option value="month">MoM</option></select></div></div><span id="status" class="sr-only" aria-live="polite">Not connected</span></div></div>
 <section class="controls" aria-label="Dashboard filters"><label>From<input id="from" type="date"></label><label>To<input id="to" type="date"></label><label class="search">SKU<input id="search" type="search" placeholder="Search SKU"></label><label>Category<select id="category"><option>All</option></select></label></section>
 <div id="error" class="notice" hidden></div><div class="range-line"><span id="scope">All records</span><div class="range-actions"><button id="reset">Reset filters</button><button id="refresh">Refresh</button></div></div>
 <section class="kpis" aria-label="Key metrics"><article><span>Make quantity</span><strong id="make">-</strong><small>Units recorded for production</small></article><article><span>Receive quantity</span><strong id="receive">-</strong><small>Units received so far</small></article><article><span>Yield</span><strong id="yield">-</strong></article><article><span id="today-label">Today · India</span><strong id="today-yield">-</strong><small id="today-make">Make: -</small><small id="today-receive">Receive: -</small></article></section>
