@@ -1,4 +1,4 @@
-# prod_db - Production yield dashboard
+# Nat Habit - Analytics - Operations / Production
 
 Read-only production dashboard with light and dark themes. No production rows, access tokens or secrets are included in this repository.
 
@@ -15,11 +15,11 @@ Use port 5173. Other origins may require an authorization configuration update. 
 
 ## Using the dashboard
 
-Source is in the top-right block. The main filter line is From, To, SKU and Category. View and Month are in the chart header. Green pulsing status means a successful live read with a valid session; red means not connected, expired or a refresh failure. The status line shows the latest production date and the last successful refresh time in India. Reduced-motion settings stop the pulsing. SKU search matches SKU only; use the Product name header for product-name searches.
+Source buttons (All, GP 44, GP-26) and DoD/MoM view buttons are beside each other in the top-right block. The main filter line is From, To, SKU and Category. Month is in the chart header. Green pulsing status means a successful live read with a valid session; red means not connected, expired or a refresh failure. The status line shows the latest production date and the last successful refresh time in India. Reduced-motion settings stop the pulsing. SKU search matches SKU only; use the Product name header for product-name searches.
 
 - Yield is displayed as a percentage with two decimal places, including in table exports.
 - The first three cards keep their selected-filter scope. The Today card uses the current India date and the selected source, category and SKU filters, independent of historical month/date filters.
-- By default the daily chart and summary show today and the previous six calendar days. Select a month or From/To range to expand them. Reset returns to the seven-day view with blank From/To.
+- By default the daily chart and summary show today and the previous six calendar days. Select a month or From/To range to expand them. Every open and Reset selects the current month (for example Nov-26), From = month start, To = today. Cards and detail/CSV use that month-to-date range. The daily chart/summary initially keep the last 7 calendar days until From, To or Month is changed. Selecting another month updates the date range to that month.
 - Every calendar date is labelled on the daily chart. Missing dates show No records, not invented zero-production rows. Today's bars use an amber accent. Scroll longer charts horizontally.
 - Month labels use Nov-26 style. Internal date keys stay unchanged for correct filtering.
 - Click the summary Date or Month header to open the date/month picker.
