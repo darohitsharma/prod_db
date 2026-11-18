@@ -17,7 +17,7 @@ The public GitHub download has NO saved company data. The separate owner-only wo
 
 The root index.html is a readable self-contained HTML/CSS/JS app. You can edit it directly in VS Code and commit/push it; Pages deploys from main / (root). server.py is local-only and is not run by GitHub Pages.
 
-For modular source, download/unzip prod_db-source.zip. Open its prod_db folder. It includes web/, tests/, prepare_pages.py and a longer step-by-step README. No data is included. Edit web/, run `node tests/core.test.js` if Node is installed, then `python3 prepare_pages.py`. Replace this repository's root index.html with the newly generated publish/index.html and commit/push. Do not replace other repositories.
+For modular source, download/unzip the file ending in prod_db-source.zip. Open its prod_db folder. It includes web/, tests/, prepare_pages.py and a longer step-by-step README. No data is included. Edit web/, run `node tests/core.test.js` if Node is installed, then `python3 prepare_pages.py`. Replace this repository's root index.html with the newly generated publish/index.html and commit/push. Do not replace other repositories.
 
 ## What it does
 
