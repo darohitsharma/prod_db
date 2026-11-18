@@ -1,43 +1,40 @@
 # prod_db - Production yield dashboard
 
-Live site: use the GitHub Pages link in this repository's deployment/Pages settings. Public UI and generic code only. No production records, Google tokens or client secrets are stored in this repository.
+Read-only production dashboard with light and dark themes. No production rows, access tokens or secrets are included in this repository.
 
-## Run this GitHub download in VS Code
+## Run in VS Code
 
-1. Click Code > Download ZIP. Extract it and open the extracted repository folder in VS Code.
-2. Terminal > New Terminal: run `python3 server.py`.
-3. The browser opens http://localhost:5173/index.html . Keep the terminal running. No npm install is needed.
-4. Click Refresh from Sheets. Choose your work account with access to both private source Sheets, then approve read-only Google Sheets access. Google may ask for its normal verification code.
-5. Click Refresh from Sheets after the data changes. This is manual refresh, the same as the original GitHub Pages dashboard. No background scheduler is configured.
-6. Ctrl+C stops the local server. If Python 3 is missing, install it from python.org, then reopen VS Code.
+1. Choose Code > Download ZIP, extract it and open the repository folder in VS Code.
+2. Open Terminal > New Terminal and run `python3 server.py`.
+3. Open http://localhost:5173/index.html and keep the terminal running. No npm install is needed.
+4. Click Refresh. If asked, sign in with an authorized work account.
+5. Click Refresh whenever you need the latest data. This is manual refresh, not an automatic background scheduler.
+6. Stop the local server with Ctrl+C.
 
-The public GitHub download has NO saved company data. The separate owner-only work Drive ZIP includes the optional checked snapshot. Do not upload that ZIP/data folder to this repository. Localhost:5173 was verified to reach normal Google OAuth sign-in with the existing client. Other ports may need their origin added in the Google Cloud client settings. No client secret is needed.
+Use port 5173. Other origins may require an authorization configuration update. Session authorization can expire; Refresh starts sign-in again when needed. There are no Connect or Disconnect controls and sessions are not stored in the code.
+
+## Using the dashboard
+
+Source is in the top-right block. The main filter line is From, To, SKU and Category. View and Month are in the chart header. Green pulsing status means a successful live read with a valid session; red means not connected, expired or a refresh failure. The status line shows the latest production date and the last successful refresh time in India. Reduced-motion settings stop the pulsing. SKU search matches SKU only; use the Product name header for product-name searches.
+
+- Yield is displayed as a percentage with two decimal places, including in table exports.
+- The first three cards keep their selected-filter scope. The Today card uses the current India date and the selected source, category and SKU filters, independent of historical month/date filters.
+- By default the daily chart and summary show today and the previous six calendar days. Select a month or From/To range to expand them. Reset returns to the seven-day view with blank From/To.
+- Every calendar date is labelled on the daily chart. Missing dates show No records, not invented zero-production rows. Today's bars use an amber accent. Scroll longer charts horizontally.
+- Month labels use Nov-26 style. Internal date keys stay unchanged for correct filtering.
+- Click the summary Date or Month header to open the date/month picker.
+- Click any Production detail header for column filters and sorting. Text supports contains, does not contain, equals, starts with and ends with. Numeric columns support comparisons and between. Dates support on, before, after and between. Blank checks are available.
+- Enter Yield filter values in percentage units: 95 means 95%. Column filters and sorting apply to the detail table and its CSV only, not the cards or summary. Clear one column or all table filters as needed.
+- Quality-count diagnostics and Check flags are not in the viewer interface. Admin checks are supplied separately as private timestamped reports, not through an unprotected hidden route.
+
+## Calculation rules
+
+Yield is Receive divided by Make, displayed as a percentage. Weighted totals use only rows with positive Make and known non-negative Receive. Missing quantities are not zero. Make and Receive cards sum all known values independently, so their quotient can differ from valid-row weighted Yield. Values above 100% are kept, not capped. Source rows are never edited by the dashboard.
 
 ## Edit the project
 
-The root index.html is a readable self-contained HTML/CSS/JS app. You can edit it directly in VS Code and commit/push it; Pages deploys from main / (root). server.py is local-only and is not run by GitHub Pages.
+Root `index.html` is the complete browser app. Edit it directly and commit changes to main to update the live site.
 
-For modular source, download/unzip the file ending in prod_db-source.zip. Open its prod_db folder. It includes web/, tests/, prepare_pages.py and a longer step-by-step README. No data is included. Edit web/, run `node tests/core.test.js` if Node is installed, then `python3 prepare_pages.py`. Replace this repository's root index.html with the newly generated publish/index.html and commit/push. Do not replace other repositories.
+The modular source ZIP, when present, contains `web/`, `tests/` and `prepare_pages.py`. Edit `web/`, run `node tests/core.test.js`, then `python3 prepare_pages.py`. The generated `publish/index.html` can replace the root app. Never commit local data, saved sessions or credentials.
 
-## What it does
-
-Green/neutral light and dark themes. All / GP 44 / GP-26 source filter, DoD day-wise or MoM month-wise grouping, All/month selector, inclusive From-To dates, category filter and SKU/product search. Trend chart, summary and full detail table, paginated rows and filtered CSV.
-
-Yield = Receive / Make, displayed as a percentage to two decimals (0.97 = 97.00%). Weighted totals use only records with positive Make and known non-negative Receive. Missing Receive is not zero; incomplete counts stay visible. Values over 100.00% are flagged, not capped. Only monthly production tabs are read. Pending and old daily tabs are excluded to avoid overlap. Row dates, not tab names, control date filtering.
-
-## Privacy and live data
-
-Sheet IDs and the browser OAuth client ID are visible identifiers, not passwords. Google tokens are held only in tab memory; reload clears them. Private row access requires Google consent and an account that can read the Sheets. The public page itself is visible to anyone, but it embeds no data. Sign-in hints are not access controls. Never make source Sheets link-viewable as a shortcut.
-
-New monthly tabs are discovered on Refresh. Google session expiry requires clicking Refresh from Sheets to authorize again. There are no Connect or Disconnect controls. This private browser-only Google token flow cannot stay permanently connected; a new tab or expired session may need Google authorization. Tokens are not persisted. A failed refresh retains the previous in-memory dataset and shows the failure. Data is read directly from Google, never through GitHub or a paid backend. Publishing code does not refresh Sheet data for an open session.
-
-If origin_mismatch appears, use localhost:5173 or add the exact scheme/host/port to the existing OAuth web client. If Google returns 403, check both source Sheet permissions, Google Sheets API enablement and Workspace policy. No billing or paid service should be enabled.
-
-
-Display update: Yield is shown as a percentage (for example 97.00%) in the KPI, summary/detail tables, chart tooltips and CSV. Daily chart dates are all labelled as DD Mon; scroll horizontally for longer date ranges. The current Asia/Kolkata day is highlighted in amber and marked TODAY. The chart bars themselves remain Make and Receive quantities, not percentages.
-
-Today card: Make, Receive and weighted Yield for the current Asia/Kolkata date. Source, category and search apply; historical date/month filters do not. The first three cards keep their existing filtered-overall scope. Record/quality diagnostic counts and Check flags are removed from the normal UI/CSV. Admin checks are supplied separately as a private timestamped report, not a hidden public admin route. Dates without production rows are labelled No records on the daily chart, not counted as zero-production source rows.
-
-Month labels use Nov-26 style in the month selector, month-wise chart/summary and the CSV Month column. ISO dates and internal YYYY-MM month keys remain unchanged for correct filtering.
-
-Default daily view: the chart and day-wise summary show the last 7 calendar days including today in India. Select a month or From/To for its full range; Reset restores the 7-day daily view with blank From/To. Overall cards, detail rows and CSV keep their selected-filter scope. No-record dates are shown as gaps, not source zeros.
+No paid hosting or billing is configured. Access to production data still requires an authorized account. Refresh errors keep the previous in-memory data visible with a warning rather than pretending it is fresh.
