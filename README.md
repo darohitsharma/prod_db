@@ -30,6 +30,10 @@ Source buttons (All, GP 44, GP-26) and DoD/MoM view buttons are beside each othe
 
 ## Calculation rules
 
+These notes are no longer shown in the dashboard page; they live here only.
+
+Totals use summed Receive divided by summed Make for rows with positive Make and a known, non-negative Receive. Yield is shown to 2 decimal places (0.97 = 97.00%). Only monthly production tabs are included; pending reports and old daily tabs are excluded to avoid overlap. Row dates control the period, even when they differ from a tab's month. Values above 100.00% are kept and flagged; source data is never edited. DoD means day-wise and MoM means month-wise, not previous-period growth. Coverage: monthly tabs from Aug 2026 onward; new month tabs are found on refresh. The dashboard is read-only, uses manual Refresh and has no automatic refresh.
+
 Yield is Receive divided by Make, displayed as a percentage. Weighted totals use only rows with positive Make and known non-negative Receive. Missing quantities are not zero. Make and Receive cards sum all known values independently, so their quotient can differ from valid-row weighted Yield. Values above 100% are kept, not capped. Source rows are never edited by the dashboard.
 
 ## Edit the project
