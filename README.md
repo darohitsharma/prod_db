@@ -6,9 +6,9 @@ Read-only production dashboard with light and dark themes. No production rows, a
 
 1. Choose Code > Download ZIP, extract it and open the repository folder in VS Code.
 2. Open Terminal > New Terminal and run `python3 server.py`.
-3. Open http://localhost:5173/index.html and keep the terminal running. No npm install is needed.
+3. Open http://localhost:5173/web/ and keep the terminal running. No npm install is needed.
 4. Click Refresh. If asked, sign in with an authorized work account.
-5. Click Refresh whenever you need the latest data. This is manual refresh, not an automatic background scheduler.
+5. Click Refresh whenever you need the latest data. This is manual refresh, not an automatic background scheduler. Refresh shows only "Updating..." and first tries Google's quiet mode (prompt none, hinted to the signed-in work account), so an already-authorised session needs no approval screen. If Google truly requires it (first use or expired session) the status reads "Update paused" and the next Refresh click opens Google's own sign-in/approval window.
 6. Stop the local server with Ctrl+C.
 
 Use port 5173. Other origins may require an authorization configuration update. Session authorization can expire; Refresh starts sign-in again when needed. There are no Connect or Disconnect controls and sessions are not stored in the code.
@@ -20,6 +20,7 @@ Source buttons (All, GP 44, GP-26) and DoD/MoM view buttons are beside each othe
 - Yield is displayed as a percentage with two decimal places, including in table exports.
 - The first three cards keep their selected-filter scope. The Today card uses the current India date and the selected source, category and SKU filters, independent of historical month/date filters.
 - By default the daily chart and summary show today and the previous six calendar days. Select a month or From/To range to expand them. Every open and Reset selects the current month (for example Nov-26), From = month start, To = today. Cards and detail/CSV use that month-to-date range. The daily chart/summary initially keep the last 7 calendar days until From, To or Month is changed. Selecting another month updates the date range to that month.
+- The day-wise summary lists newest first (today, yesterday, and so on). Today's row has a light green background that gently blinks; reduced-motion settings keep it static. The detail table also defaults to newest date first, and its header sort still works. The chart stays oldest to newest.
 - Every calendar date is labelled on the daily chart. Missing dates show No records, not invented zero-production rows. Today's bars use an amber accent. Scroll longer charts horizontally.
 - Month labels use Nov-26 style. Internal date keys stay unchanged for correct filtering.
 - Click the summary Date or Month header to open the date/month picker.
