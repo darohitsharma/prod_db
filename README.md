@@ -1,46 +1,78 @@
-# Nat Habit - Analytics - Operations / Production
+# Production Yield Dashboard
 
-Read-only production dashboard with light and dark themes. No production rows, access tokens or secrets are included in this repository.
+A production analytics dashboard with weighted yield, multi-select filters and role-based access. Built with Google Apps Script and plain JavaScript. Production source spreadsheets are read-only.
 
-## Run in VS Code
+[Try the sample-data demo](https://darohitsharma.github.io/prod_db/) · [Setup guide](SETUP.md) · [Security boundaries](SECURITY.md) · [Changes](CHANGELOG.md)
 
-1. Choose Code > Download ZIP, extract it and open the repository folder in VS Code.
-2. Open Terminal > New Terminal and run `python3 server.py`.
-3. Open http://localhost:5173/web/ and keep the terminal running. No npm install is needed.
-4. Click Refresh. If asked, sign in with an authorized work account.
-5. Click Refresh whenever you need the latest data. This is manual refresh, not an automatic background scheduler. Refresh shows only "Updating..." and first tries Google's quiet mode (prompt none, hinted to the signed-in work account), so an already-authorised session needs no approval screen. If Google truly requires it (first use or expired session) the status reads "Update paused" and the next Refresh click opens Google's own sign-in/approval window.
-6. Stop the local server with Ctrl+C.
+> The public demo uses generated sample rows only. It has no production connection. The authenticated Apps Script app is a separate deployment, with private configuration held outside this repository.
 
-Use port 5173. Other origins may require an authorization configuration update. Session authorization can expire; Refresh starts sign-in again when needed. There are no Connect or Disconnect controls and sessions are not stored in the code.
+## What it does
 
-## Using the dashboard
+- **Month-to-date by default.** Current month in India time across cards, production chart and summary. Manual dates and nonconsecutive month selections remain available.
+- **Explore without changing records.** Searchable Month, SKU and Category multi-selects. Compact table-header filters, sorting, text/number/date rules, blanks and two conditions joined by AND/OR.
+- **See category performance.** Day-wise or month-wise summary beside a category chart containing all its SKUs. A separate top-level SKU selection does not hide the other SKUs in that chart.
+- **Separate responsibilities.** Admin manages controllers, viewers and source refresh. Controllers manage viewers and shared dashboard defaults. Viewers can filter and export.
+- **Read a saved snapshot.** Normal page loads read the last successful snapshot, not the production source spreadsheets. An owner-installed trigger updates it every 12 hours. A failed update keeps the previous snapshot and shows its age/status.
+- **Use it on desktop or mobile.** Light/dark themes, responsive panels, keyboard-accessible controls and reduced-motion support.
 
-Source buttons (All, GP 44, GP-26) and DoD/MoM view buttons are beside each other in the top-right block. The main filter line is From, To, SKU and Category. Month is in the chart header. Green pulsing status means a successful live read with a valid session; red means not connected, expired or a refresh failure. The status line shows the latest production date and the last successful refresh time in India. Reduced-motion settings stop the pulsing. SKU search matches SKU only; use the Product name header for product-name searches.
+## Preview locally
 
-- Yield is displayed as a percentage with two decimal places, including in table exports.
-- The first three cards keep their selected-filter scope. The Today card uses the current India date and the selected source, category and SKU filters, independent of historical month/date filters.
-- By default the daily chart and summary show today and the previous six calendar days. Select a month or From/To range to expand them. Every open and Reset selects the current month (for example Nov-26), From = month start, To = today. Cards and detail/CSV use that month-to-date range. The daily chart/summary initially keep the last 7 calendar days until From, To or Month is changed. Selecting another month updates the date range to that month.
-- The day-wise summary lists newest first (today, yesterday, and so on). Today's row has a light green background that gently blinks; reduced-motion settings keep it static. The detail table also defaults to newest date first, and its header sort still works. The chart stays oldest to newest.
-- The status line (green pulsing dot, "Data as of ... refreshed ...") is in the top-left area. Dark mode is a pure black, white and grey theme with no green tint; light mode stays green. In dark mode the today row blinks between two greys with an amber edge.
-- Every calendar date is labelled on the daily chart. Missing dates show No records, not invented zero-production rows. Today's bars use an amber accent. Scroll longer charts horizontally.
-- Month labels use Nov-26 style. Internal date keys stay unchanged for correct filtering.
-- Click the summary Date or Month header to open the date/month picker.
-- Click any Production detail header for column filters and sorting. Text supports contains, does not contain, equals, starts with and ends with. Numeric columns support comparisons and between. Dates support on, before, after and between. Blank checks are available.
-- Enter Yield filter values in percentage units: 95 means 95%. Column filters and sorting apply to the detail table and its CSV only, not the cards or summary. Clear one column or all table filters as needed.
-- Quality-count diagnostics and Check flags are not in the viewer interface. Admin checks are supplied separately as private timestamped reports, not through an unprotected hidden route.
+Requires Python 3. No packages, account or credentials are needed for the demo.
 
-## Calculation rules
+```bash
+python3 server.py
+```
 
-These notes are no longer shown in the dashboard page; they live here only.
+Open **http://localhost:5173**. This serves `index.html`, the synthetic interactive demo, on localhost only. It does not run the Apps Script backend.
 
-Totals use summed Receive divided by summed Make for rows with positive Make and a known, non-negative Receive. Yield is shown to 2 decimal places (0.97 = 97.00%). Only monthly production tabs are included; pending reports and old daily tabs are excluded to avoid overlap. Row dates control the period, even when they differ from a tab's month. Values above 100.00% are kept and flagged; source data is never edited. DoD means day-wise and MoM means month-wise, not previous-period growth. Coverage: monthly tabs from Aug 2026 onward; new month tabs are found on refresh. The dashboard is read-only, uses manual Refresh and has no automatic refresh.
+## Deploy an authenticated app
 
-Yield is Receive divided by Make, displayed as a percentage. Weighted totals use only rows with positive Make and known non-negative Receive. Missing quantities are not zero. Make and Receive cards sum all known values independently, so their quotient can differ from valid-row weighted Yield. Values above 100% are kept, not capped. Source rows are never edited by the dashboard.
+Use [SETUP.md](SETUP.md) for the full owner setup, privacy check and deployment steps. Requires a Google Workspace account and read access to the source spreadsheets. Organization policy and Google quotas apply.
 
-## Edit the project
+Public source files are templates, not a backup of any private deployment. Existing installations must preserve their own project ID, owner/source settings, roles, snapshot storage and trigger. Do not overwrite a working private installation blindly.
 
-Root `index.html` is the complete browser app. Edit it directly and commit changes to main to update the live site.
+## Project map
 
-The modular source ZIP, when present, contains `web/`, `tests/` and `prepare_pages.py`. Edit `web/`, run `node tests/core.test.js`, then `python3 prepare_pages.py`. The generated `publish/index.html` can replace the root app. Never commit local data, saved sessions or credentials.
+| File | Purpose |
+| --- | --- |
+| `Code.gs` | Server-side access, source reads, snapshot lifecycle and trigger |
+| `Index.html` | Authenticated dashboard UI and calculations |
+| `appsscript.json` | Apps Script runtime and explicit scopes |
+| `.clasp.example.json` | Placeholder project mapping, copy locally only |
+| `.claspignore` | Upload only the three app files, not the public demo |
+| `index.html` | Public interactive demo, generated sample data only |
+| `server.py` | Dependency-free localhost demo server |
+| `test.cjs` | Synthetic backend and snapshot regression tests |
+| `SETUP.md` | Deployment, private configuration and troubleshooting |
+| `SECURITY.md` | Access, storage, disclosure and operational limits |
+| `CHANGELOG.md` | Current features and compatibility corrections |
 
-No paid hosting or billing is configured. Access to production data still requires an authorized account. Refresh errors keep the previous in-memory data visible with a warning rather than pretending it is fresh.
+The differently cased `Index.html` and `index.html` have different purposes. Keep their names exactly as shown. `.claspignore` prevents the public demo from being deployed as the authenticated app.
+
+The previously tracked `5-prod_db-source.zip` is a **legacy browser-auth build**, retained for history. It is not the current Apps Script source. Use the editable source files above for new work.
+
+## Calculations
+
+For rows with positive Make and known non-negative Receive:
+
+```text
+yield = sum(Receive) / sum(Make)
+```
+
+Display as a percentage to two decimals. Missing quantities stay missing. Make and Receive cards sum known values independently, so their quotient can differ from valid-row weighted yield. Values above 100% are not capped. DoD means day-wise; MoM means month-wise, not growth versus the previous period. Only recognized monthly tabs are read; row dates determine the period.
+
+The Today card is explicitly daily and independent of the historical date range. Detail-column filters affect detail/CSV; summary-column filters affect the summary. Top-level filters affect the dashboard, with the documented all-SKU category-chart exception.
+
+## Check changes
+
+Requires Node.js 18 or newer. No npm dependencies.
+
+```bash
+node test.cjs
+```
+
+Tests use synthetic rows and service mocks. They cover access denial/revocation, admin-only refresh, snapshot creation, trigger deduplication, no source reads on snapshot loads, failed-update retention, integrity checks and concurrent-refresh protection. A mock pass is not proof of Apps Script compatibility: also check push, authorization, deployed page load/reload and scheduled execution on a test deployment before promoting a change.
+
+## Operational limits
+
+A page still needs authentication and a short saved-data load. This is not offline access or instant rendering. Trigger timing can vary; quotas and failures can delay an update. The page shows the saved timestamp, stale state and recorded failures instead of claiming continuous real-time freshness. See [SECURITY.md](SECURITY.md) before storing or sharing any real data.
