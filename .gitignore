@@ -1,8 +1,18 @@
-data/
+# Private deployment and authentication
+.clasp.json
+.clasprc.json
 .env*
 *token*.json
 *credentials*.json
 client_secret*.json
+config.local.*
+# No source data or generated snapshots
+data/
+snapshot*
+*.zip
+*.csv
+*.xlsx
+# Local tooling
 __pycache__/
 .DS_Store
-*.zip
+node_modules/
